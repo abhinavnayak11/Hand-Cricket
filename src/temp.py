@@ -39,9 +39,9 @@ while True:
     cv2.putText(frame, f"Press 'r' to restart", (460, 40), font, 1, red, 2)
 
     cv2.putText(frame, f"Toss", (280, 90), 0, 1.5, blue, 2)
-    cv2.putText(frame, f"Press 'h' for heads or 't' for tails", (100, 130), font, 1.5, blue, 2)
-    cv2.putText(frame, f"Heads it is!!!", (250, 130), font, 1.5, blue, 2)
-    cv2.putText(frame, f"Batsman is Human. Press space to play", (60, 160), font, 1.5, blue, 2)
+    # cv2.putText(frame, f"Press 'h' for heads or 't' for tails", (100, 130), font, 1.5, blue, 2)
+    # cv2.putText(frame, f"It's Heads!! You have won", (150, 130), font, 1.5, blue, 2)
+    # cv2.putText(frame, f"Computer is the batsman. Press space to play", (20, 160), font, 1.5, blue, 2)
 
     cv2.putText(frame, f"Your Score (Batsman) : 34", (10, 20), font, 1.2, blue, 2)
     cv2.putText(frame, f"Computer Score (Bowler) : 44", (10, 40), font, 1.2, blue, 2)
@@ -49,18 +49,18 @@ while True:
     cv2.putText(frame, f"That's OUT!!!", (230, 120), font, 2, blue, 2) 
 
 
-    cv2.putText(frame, f"Now, the batsman is Human. You need 33 runs to win", (50, 160), font, 1.2, blue, 2)
-        
+    # cv2.putText(frame, f"Now, you are the batsman. You need 33 runs to win", (50, 160), font, 1.2, blue, 2)
+    cv2.putText(frame, f"Now, computer is the batsman and needs 33 runs to win", (30, 160), font, 1.2, blue, 2)
 
     cv2.putText(frame, f"{5}", (610, 260), font, fontscale, (0,0,0), thickness)
     cv2.putText(frame, f"{0}", (170, 260), font, fontscale, (0,0,0), thickness)
 
 
 
-    cv2.putText(frame, f" Game Over ", (170, 120), 0, 1.5, blue, thickness)
-    cv2.putText(frame, f"You win", (250, 170), font, fontscale, blue, 2)
-    cv2.putText(frame, f"Computer wins", (200, 170), font, fontscale, blue, 2)
-    cv2.putText(frame, f"It's a draw", (230, 170), font, fontscale, blue, 2)
+    # cv2.putText(frame, f" Game Over ", (170, 120), 0, 1.5, blue, thickness)
+    # cv2.putText(frame, f"You win", (250, 170), font, fontscale, blue, 2)
+    # cv2.putText(frame, f"Computer wins", (200, 170), font, fontscale, blue, 2)
+    # cv2.putText(frame, f"It's a draw", (230, 170), font, fontscale, blue, 2)
 
     cv2.rectangle(frame, (0, 0), (640, 190), (0,0,0), 2)
     cv2.rectangle(frame, (161, 230), (200, 270), (0,0,0), 2)
