@@ -1,0 +1,13 @@
+# Jupyter Notebook
+*.ipynb_checkpoints
+
+# zip files
+*.zip
+
+# folders
+input/
+notebooks/
+test-images/
+models/
+folds/
+.comments/
