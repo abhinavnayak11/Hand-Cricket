@@ -41,8 +41,6 @@ augmentations = A.Compose([
 # create video capture instance
 cap = cv2.VideoCapture(1)
 
-random.seed(10)   # to be deleted
-
 play_turn = 0      # player playing one ball. 1 when playing. 0 when done.
 start_time = 0     # time between pressing space and generating a number
 game_started = 0   # 0 if game in standby (just before starting of each turn). 1 if game being played
@@ -59,6 +57,9 @@ player_scores = {'human':0,'computer':0}
 lower_white = np.array([230,230,230])   # to mask hand images from static/
 upper_white = np.array([255,255,255])   
 
+font =  1   #  cv2.FONT_HERSHEY_PLAIN
+fontscale = 2
+thickness = 3
 blue = (89,61,20)   
 red = (0,0,255)
 yellow = (26,180,244)
@@ -68,9 +69,11 @@ while True:
     frame = cv2.flip(frame, 1)       # Simulating mirror image
     frame[0:190,0:640] = yellow      # upper part background color 
 
-    font =  1   #  cv2.FONT_HERSHEY_PLAIN
-    fontscale = 2
-    thickness = 3
+    # instructions panel
+    instructions = np.full((150,450,3), yellow).astype(np.uint8)
+    cv2.putText(instructions, f"IMPORTANT!!", (150, 40), font, 1.5, (0,0,255), 2)
+    cv2.putText(instructions, f"When playing, place your hand inside the", (10, 80), 3, 0.6, (0,0,0), 1)
+    cv2.putText(instructions, f"right frame and then press space", (30, 110), 3, 0.6, (0,0,0), 1)
 
     interrupt = cv2.waitKey(10)
     if interrupt & 0xFF == 27: # esc key
@@ -116,8 +119,13 @@ while True:
                     player = 'computer'
                     toss = 'Heads'
         if player:
-            cv2.putText(frame, f"{toss} it is!!!", (250, 130), font, 1.5, blue, 2)
-            cv2.putText(frame, f"Batsman is {player}. Press space to play", (60, 160), font, 1.5, blue, 2)
+            if player == 'human':
+                cv2.putText(frame, f"It's {toss}!! You have won!", (150, 130), font, 1.5, blue, 2)
+                cv2.putText(frame, f"You are the batsman. Press space to bat", (60, 160), font, 1.5, blue, 2)
+            else:
+                cv2.putText(frame, f"It's {toss}!! You have lost!", (150, 130), font, 1.5, blue, 2)
+                cv2.putText(frame, f"Computer is the batsman. Press space to bowl", (20, 160), font, 1.5, blue, 2)
+            
 
     # display the score and who is the batsman/bowler
     if ((game_started == 1) or ((change_turn == 1) & (game_started == 0))):
@@ -140,10 +148,15 @@ while True:
     # when player 1 gets out and turn changes
     if (change_turn == 1) & (game_started == 0):
         cv2.putText(frame, f"That's OUT!!!", (230, 120), font, 2, blue, 2)
-        cv2.putText(frame, f"Now, the batsman is {player}. You need {player_scores[first_player]} runs to win", (40, 160), font, 1.2, blue, 2)
-         
-    # press space to start the game. This won't work if game has ended. Need to press 'r' to restart
-    if (interrupt & 0xFF == 32) & (game_ended == 0): 
+        if player == 'human':
+            cv2.putText(frame, f"Now, you are the batsman. You need {player_scores[first_player]+1} runs to win", (50, 160), font, 1.2, blue, 2)
+        else:
+            cv2.putText(frame, f"Now, computer is the batsman and needs {player_scores[first_player]+1} runs to win", (30, 160), font, 1.2, blue, 2)
+
+    # press space to start the game. 
+    # won't work if toss not done yet
+    # won't work if game has ended. Need to press 'r' to restart
+    if (interrupt & 0xFF == 32) & (game_ended == 0) & (toss_done == 1): 
         game_started = 1
         play_turn = 1
         start_time = time.time()
@@ -162,8 +175,8 @@ while True:
     # get the time elapsed after pressing space
     elapsed = time.time() - start_time
 
-    # play one ball after 1 second of pressing space
-    if (play_turn == 1) & (elapsed > 1):
+    # play one ball after 0.5 second of pressing space
+    if (play_turn == 1) & (elapsed > 0.5):
         
         count+=1
 
@@ -192,7 +205,7 @@ while True:
         play_turn = 0
 
     # display each players number after each ball 
-    if (((game_started == 1) & (elapsed > 1)) or ((change_turn == 1) & (game_started == 0))):
+    if (((game_started == 1) & (elapsed > 0.5)) or ((change_turn == 1) & (game_started == 0))):
 
         frame[229:479,1:201] = n_img_cut
         cv2.putText(frame, f"{pred.item()}", (610, 260), font, fontscale, (0,0,0), thickness)
@@ -203,9 +216,16 @@ while True:
         # when different numbers played, add the player's number to score
         if pred.item() != n:
             if player == 'human':
-                player_scores[player]+=pred.item()
+                if pred.item() == 0:         # add other players number when 0 is played
+                    player_scores[player]+=n  
+                else:
+                    player_scores[player]+=pred.item()
             else:
-                player_scores[player]+=n
+                if n == 0:                   # add other players number when 0 is played
+                    player_scores[player]+=pred.item()
+                else:
+                    player_scores[player]+=n
+                
             track_count = count
 
         # when 1st player gets out, change turn
@@ -219,7 +239,7 @@ while True:
             track_count = 0
             game_started = 0
 
-        # when both players have finished playing
+        # when both players have finished playing, end the game
         else:
             game_ended = 1
             count = 0
@@ -249,6 +269,7 @@ while True:
     cv2.rectangle(frame, (0, 0), (640, 480), (0,0,0), 2)     # border around the whole frame
 
     cv2.imshow("Odd or Even (The game)", frame)
+    cv2.imshow("Instructions", instructions)
 
 cap.release()
 cv2.destroyAllWindows()
