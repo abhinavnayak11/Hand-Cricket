@@ -37,7 +37,7 @@ model.classifier = nn.Sequential(
     nn.Linear(500, 7)
 )
 
-model.load_state_dict(torch.load('models/hand-cricket-model2.pth', map_location=torch.device('cpu')))
+model.load_state_dict(torch.load('models/hand-cricket-densenet121.pth', map_location=torch.device('cpu')))
 
 
 if __name__=='__main__':
