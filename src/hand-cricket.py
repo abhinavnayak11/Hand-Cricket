@@ -28,7 +28,7 @@ model.classifier = nn.Sequential(
 )
 
 # load the saved model
-model.load_state_dict(torch.load('models/hand-cricket-model2.pth', map_location=torch.device('cpu')))
+model.load_state_dict(torch.load('models/hand-cricket-densenet121.pth', map_location=torch.device('cpu')))
 model.eval() 
 
 # get the transform
@@ -268,7 +268,7 @@ while True:
     cv2.rectangle(frame, (0, 190), (640, 190), (0,0,0), 2)   # line at the end of instructions panel
     cv2.rectangle(frame, (0, 0), (640, 480), (0,0,0), 2)     # border around the whole frame
 
-    cv2.imshow("Odd or Even (The game)", frame)
+    cv2.imshow("Hand Cricket", frame)
     cv2.imshow("Instructions", instructions)
 
 cap.release()
