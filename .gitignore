@@ -1,3 +1,8 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
 # Jupyter Notebook
 *.ipynb_checkpoints
 
@@ -5,9 +10,9 @@
 *.zip
 
 # folders
-input/
+__pycache__
 notebooks/
 test-images/
-models/
 folds/
 .comments/
+models/
