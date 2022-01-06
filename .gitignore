@@ -11,3 +11,7 @@ test-images/
 models/
 folds/
 .comments/
+
+# files
+# create_folds.py
+# temp.py
