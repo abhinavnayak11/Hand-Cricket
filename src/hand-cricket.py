@@ -15,7 +15,7 @@ import albumentations as A
 model = torchvision.models.densenet121(pretrained=True)
 num_ftrs = model.classifier.in_features
 model.classifier = nn.Sequential(
-    nn.Linear(num_ftrs, 500),
+    nn.Linear(num_ftrs, 500),  
     nn.Linear(500, 7)
 )
 
