@@ -1,3 +1,6 @@
+# Reference:
+#   - Abhishek Thakur : AAAMLP
+
 from torch import nn
 import torchvision
 

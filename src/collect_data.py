@@ -1,4 +1,4 @@
-# Credits: 
+# Reference: 
 # - Adarsh Menon : https://github.com/chasinginfinity/number-sign-recognition/blob/master/collect-data.py 
 
 import cv2
