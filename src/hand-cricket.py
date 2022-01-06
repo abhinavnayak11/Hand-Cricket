@@ -47,6 +47,8 @@ start_time = 0     # time between pressing space and generating a number
 game_started = 0   # 0 if game in standby (just before starting of each turn). 1 if game being played
 game_ended = 0     # 1 if game comes to an end. 0 otherwise
 toss_done = 0      # 1 if toss completed
+toss_start_time = 0
+toss_started = 0
 change_turn = 0    # 0: 1st player, 1: 2nd player
 
 count = 0          # counts the number of balls played
@@ -131,11 +133,16 @@ while True:
             cv2.putText(frame, f"Press 'o' for odd or 'e' for even", (100, 130), font, 1.5, blue, 2)
 
             if ((interrupt & 0xFF == 111) or (interrupt & 0xFF == 101)):   # press o for odd or e for even
-
+                toss_started = 1
                 if (interrupt & 0xFF == 111):
                     chosen = 1                  # 1 is odd
                 else:
                     chosen = 0                  # 0 is even
+                toss_start_time = time.time()
+            
+            toss_elapsed_time = time.time() - toss_start_time
+
+            if ((toss_started == 1)&(toss_elapsed_time > 1)):
 
                 toss_done = 1
                 n, n_img = random_number_image()  
@@ -206,7 +213,7 @@ while True:
     elapsed = time.time() - start_time
 
     # play one ball after 0.5 second of pressing space
-    if (play_turn == 1) & (elapsed > 0.5):
+    if (play_turn == 1) & (elapsed > 1):
         
         count+=1
 
@@ -222,7 +229,7 @@ while True:
         play_turn = 0
 
     # display each players number after each ball 
-    if (((game_started == 1) & (elapsed > 0.5)) or ((change_turn == 1) & (game_started == 0))):
+    if (((game_started == 1) & (elapsed > 1)) or ((change_turn == 1) & (game_started == 0))):
 
         frame[229:479,1:201] = n_img_cut   # replacing left frame with number image (tranparent background)
         cv2.putText(frame, f"{pred.item()}", (610, 260), font, fontscale, (0,0,0), thickness)
@@ -279,6 +286,7 @@ while True:
         game_ended = 0
         game_started = 0
         toss_done = 0
+        toss_started = 0
         player = None
         change_turn = 0
 
