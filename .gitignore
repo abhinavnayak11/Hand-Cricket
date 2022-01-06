@@ -13,5 +13,5 @@ folds/
 .comments/
 
 # files
-# create_folds.py
-# temp.py
+create_folds.py
+temp.py
