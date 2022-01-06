@@ -1,3 +1,6 @@
+# Credits: 
+# - Adarsh Menon : https://github.com/chasinginfinity/number-sign-recognition/blob/master/collect-data.py 
+
 import cv2
 import numpy as np
 import os
