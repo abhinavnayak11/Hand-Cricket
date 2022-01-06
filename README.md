@@ -13,7 +13,7 @@ This is a computer vision based implementation of the popular childhood game 'Ha
 
 **<p align="center">The Game in action</p>**
 
-![](static/images/demo.gif)
+![Demo](static/images/demo.mp4)
 
 
 <br>
@@ -68,3 +68,8 @@ This is a computer vision based implementation of the popular childhood game 'Ha
 
 ## [Future Scope](#table-of-content)
 - Although, this was a fun application, the dataset can be used in applications like sign language recognition. 
+
+<br>
+
+---
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/abhinavnayak11/Hand-Cricket/blob/main/LICENSE)
