@@ -65,6 +65,31 @@ blue = (89,61,20)
 red = (0,0,255)
 yellow = (26,180,244)
 
+def transparent_background(n_img, right_frame):
+    image_copy = np.copy(n_img)
+    mask = cv2.inRange(image_copy, lower_white, upper_white)
+    masked_image = np.copy(n_img)
+    masked_image[mask != 0] = [0, 0, 0]
+    crop_background = np.copy(right_frame)
+    crop_background[mask == 0] = [0, 0, 0]
+    n_img_cut = masked_image + crop_background
+    return n_img_cut
+
+def random_number_image():
+    n = random.randint(0,6)
+    n_img = cv2.imread(f'static/{n}.jpg')   # get the hand image of the generated number
+    n_img = cv2.resize(n_img, (200,250))
+    return n, n_img
+
+def get_hand_prediction(roi):
+    augmented = augmentations(image=roi)
+    img = augmented["image"]
+    img = img.transpose(2,0,1).astype(np.float32)
+    img_tensor = torch.tensor(img)
+    output = model(img_tensor.unsqueeze(0))
+    pred = torch.argmax(output, dim=1)
+    return pred
+
 while True:
     _, frame = cap.read()
     frame = cv2.flip(frame, 1)       # Simulating mirror image
@@ -97,29 +122,39 @@ while True:
 
     # To conduct toss when game starts
     if (game_started == 0) & (change_turn!=1):   
-        n_img_cut = frame[229:479,1:201]
-        cv2.putText(frame, f"Toss", (280, 90), 0, 1.5, blue, 2)
         if toss_done == 0:
-            cv2.putText(frame, f"Press 'h' for heads or 't' for tails", (100, 130), font, 1.5, blue, 2)
-            if (interrupt & 0xFF == 104):   # press h for heads
+            n_img_cut = frame[229:479,1:201]
+        cv2.putText(frame, f"Toss", (280, 90), 0, 1.5, blue, 2)
+        
+        if toss_done == 0:
+            
+            cv2.putText(frame, f"Press 'o' for odd or 'e' for even", (100, 130), font, 1.5, blue, 2)
+
+            if ((interrupt & 0xFF == 111) or (interrupt & 0xFF == 101)):   # press o for odd or e for even
+
+                if (interrupt & 0xFF == 111):
+                    chosen = 1                  # 1 is odd
+                else:
+                    chosen = 0                  # 0 is even
+
                 toss_done = 1
-                toss = random.randint(0,1)  # 0 is heads, 1 is tails
-                if toss == 0:    
+                n, n_img = random_number_image()  
+                pred = get_hand_prediction(roi)
+
+                odd_or_even = (pred.item()+n)%2        # 0 is even, 1 is odd
+                win = (odd_or_even == chosen)
+
+                if win:    
                     player =  'human'
-                    toss = 'Heads'
                 else:
                     player = 'computer'
-                    toss = 'Tails'
-            if (interrupt & 0xFF == 116):   # press h for heads
-                toss_done = 1
-                toss = random.randint(0,1)  # 0 is heads, 1 is tails
-                if toss == 1:    
-                    player =  'human'
-                    toss = 'Tails'
-                else:
-                    player = 'computer'
-                    toss = 'Heads'
+                
+                toss = {0:'even', 1:'odd'}[odd_or_even]
+                
         if player:
+            frame[229:479,1:201] = transparent_background(n_img, frame[229:479,1:201])  # replacing left frame with number image (tranparent background)
+            cv2.putText(frame, f"{pred.item()}", (610, 260), font, fontscale, (0,0,0), thickness)
+            cv2.putText(frame, f"{n}", (170, 260), font, fontscale, (0,0,0), thickness)
             if player == 'human':
                 cv2.putText(frame, f"It's {toss}!! You have won!", (150, 130), font, 1.5, blue, 2)
                 cv2.putText(frame, f"You are the batsman. Press space to bat", (60, 160), font, 1.5, blue, 2)
@@ -165,13 +200,7 @@ while True:
 
     # to mask the hand images from static folder
     if (((game_started == 1) & (play_turn == 0)) or ((change_turn == 1) & (game_started == 0))):
-        image_copy = np.copy(n_img)
-        mask = cv2.inRange(image_copy, lower_white, upper_white)
-        masked_image = np.copy(n_img)
-        masked_image[mask != 0] = [0, 0, 0]
-        crop_background = np.copy(frame[229:479,1:201])
-        crop_background[mask == 0] = [0, 0, 0]
-        n_img_cut = masked_image + crop_background
+        n_img_cut = transparent_background(n_img, frame[229:479,1:201])
     
     # get the time elapsed after pressing space
     elapsed = time.time() - start_time
@@ -182,33 +211,20 @@ while True:
         count+=1
 
         # computer play
-        n = random.randint(0,6)
-        n_img = cv2.imread(f'static/{n}.jpg')   # get the hand image of the generated number
-        n_img = cv2.resize(n_img, (200,250))
+        n, n_img = random_number_image()
 
         # removing white background from computer images
-        image_copy = np.copy(n_img)
-        mask = cv2.inRange(image_copy, lower_white, upper_white)
-        masked_image = np.copy(n_img)
-        masked_image[mask != 0] = [0, 0, 0]
-        crop_background = np.copy(frame[229:479,1:201])
-        crop_background[mask == 0] = [0, 0, 0]
-        n_img_cut = masked_image + crop_background
+        n_img_cut = transparent_background(n_img, frame[229:479,1:201])
 
         # human play
-        augmented = augmentations(image=roi)
-        img = augmented["image"]
-        img = img.transpose(2,0,1).astype(np.float32)
-        img_tensor = torch.tensor(img)
-        output = model(img_tensor.unsqueeze(0))
-        pred = torch.argmax(output, dim=1)
+        pred = get_hand_prediction(roi)
 
         play_turn = 0
 
     # display each players number after each ball 
     if (((game_started == 1) & (elapsed > 0.5)) or ((change_turn == 1) & (game_started == 0))):
 
-        frame[229:479,1:201] = n_img_cut
+        frame[229:479,1:201] = n_img_cut   # replacing left frame with number image (tranparent background)
         cv2.putText(frame, f"{pred.item()}", (610, 260), font, fontscale, (0,0,0), thickness)
         cv2.putText(frame, f"{n}", (170, 260), font, fontscale, (0,0,0), thickness)
     
