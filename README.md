@@ -16,6 +16,7 @@ This is a computer vision based implementation of the popular childhood game 'Ha
 ![](static/images/demo.gif)
 
 
+<br>
 ## [Installation](#table-of-content)
 - You need Python (3.6) & git (to clone this repo)
 - `conda env create -f environment.yml` : Create a virtual env with all the dependencies
@@ -24,6 +25,7 @@ This is a computer vision based implementation of the popular childhood game 'Ha
 - `conda activate comp-vision` : activate the virtual env
 - `python src/hand-cricket.py` : Run the script
 
+<br>
 ## [Game rules](#table-of-content)
 **Hand signals**
 - You can play numbers 0, 1, 2, 3, 4, 5, 6. Their hand sign are shown [here](static)    
@@ -45,7 +47,7 @@ This is a computer vision based implementation of the popular childhood game 'Ha
 - **Winning/Losing**:
     - After both the players have finished their innings, the person scoring more runs wins the game
 
-
+<br>
 ## [Project Details](#table-of-content)
 1. **Data Collection** : 
     - After failing to find a suitable dataset, I created my own dataset using my phone camera. 
@@ -56,8 +58,9 @@ This is a computer vision based implementation of the popular childhood game 'Ha
     - Images were divided into training and validation set. Training set was used to train the model, whereas validation set helped validate the model performance.
 3. **Model training** : 
     - Different pretrained models(resent18, densenet121 etc, which are pre-trained on the ImageNet dataset)  from pytorch library were used to train on this dataset. Except the last 2 layers, all the layers were frozen and then trained. With this the pre-trained model helps extracting useful features and the last 2 layers will be fine-tuned to my dataset. 
-    - learning rate for training the model was chosen with trial and error. For each model, learning rate was different.
+    - Learning rate for training the model was chosen with trial and error. For each model, learning rate was different.
     - Of all the models trained, densnet121 performed the best, with a validation accuracy of 0.994.
 
+<br>
 ## [Future Scope](#table-of-content)
 - Although, this was a fun application, the dataset can be used in applications like sign language recognition. 
