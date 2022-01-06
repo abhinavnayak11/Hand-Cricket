@@ -5,7 +5,6 @@
   * [Installation](#installation)
   * [Game rules](#game-rules)
   * [Project Details](#project-details)
-  * [Project Structure](#project-structure)
   * [Future scope](#future-scope)
 
 ## [Overview](#table-of-content)
@@ -13,11 +12,7 @@ This is a computer vision based implementation of the popular childhood game 'Ha
 
 **<p align="center">The Game in action</p>**
 
-
-
 https://user-images.githubusercontent.com/38727070/148376979-40d1fdaf-ee42-4210-9dd1-e2035103fe6a.mov
-
-
 
 <br>
 

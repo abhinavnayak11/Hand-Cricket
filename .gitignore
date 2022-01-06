@@ -1,8 +1,10 @@
 # Jupyter Notebook
 *.ipynb_checkpoints
 
-# zip files
+# all files
 *.zip
+*.mp4
+*.mov
 
 # folders
 input/
