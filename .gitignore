@@ -10,9 +10,11 @@ __pycache__/
 *.zip
 
 # folders
+input/
 __pycache__
 notebooks/
+models/
 test-images/
 folds/
 .comments/
-models/
+
