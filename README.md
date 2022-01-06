@@ -13,7 +13,10 @@ This is a computer vision based implementation of the popular childhood game 'Ha
 
 **<p align="center">The Game in action</p>**
 
-![Demo](static/images/demo.mp4)
+
+
+https://user-images.githubusercontent.com/38727070/148376979-40d1fdaf-ee42-4210-9dd1-e2035103fe6a.mov
+
 
 
 <br>
