@@ -71,5 +71,21 @@ while True:
 
     cv2.imshow("Frame", frame)
 
+    instructions = np.full((265,460,3), yellow).astype(np.uint8)
+    cv2.putText(instructions, f"IMPORTANT!!", (150, 40), font, 1.5, (0,0,255), 2)
+    # cv2.putText(instructions, f"When playing, place your hand inside the", (10, 80), 3, 0.6, (0,0,0), 1)
+    # cv2.putText(instructions, f"right frame and then press space", (30, 110), 3, 0.6, (0,0,0), 1)
+
+    cv2.putText(instructions, f"1. During toss, press 'o' for odd and 'e'", (10, 80), 3, 0.6, (0,0,0), 1)
+    cv2.putText(instructions, f"for even and then position your hand", (30, 110), 3, 0.6, (0,0,0), 1)
+    cv2.putText(instructions, f"inside the right frame", (30, 140), 3, 0.6, (0,0,0), 1)
+
+    cv2.putText(instructions, f"2. When playing, press space and then", (10, 180), 3, 0.6, (0,0,0), 1)
+    cv2.putText(instructions, f"place your hand inside the right frame", (30, 210), 3, 0.6, (0,0,0), 1)
+
+    cv2.putText(instructions, f"Press esc to close", (302, 260), 2, 0.5, red, 1)
+
+    cv2.imshow("Instructions", instructions)
+
 cap.release()
 cv2.destroyAllWindows()

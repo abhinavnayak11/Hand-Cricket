@@ -50,6 +50,7 @@ toss_done = 0      # 1 if toss completed
 toss_start_time = 0
 toss_started = 0
 change_turn = 0    # 0: 1st player, 1: 2nd player
+instructions_window = 1
 
 count = 0          # counts the number of balls played
 track_count = 0    # tracks the count 
@@ -97,15 +98,25 @@ while True:
     frame = cv2.flip(frame, 1)       # Simulating mirror image
     frame[0:190,0:640] = yellow      # upper part background color 
 
-    # instructions panel
-    instructions = np.full((150,450,3), yellow).astype(np.uint8)
-    cv2.putText(instructions, f"IMPORTANT!!", (150, 40), font, 1.5, (0,0,255), 2)
-    cv2.putText(instructions, f"When playing, place your hand inside the", (10, 80), 3, 0.6, (0,0,0), 1)
-    cv2.putText(instructions, f"right frame and then press space", (30, 110), 3, 0.6, (0,0,0), 1)
-
+    # q key to close window
     interrupt = cv2.waitKey(10)
-    if interrupt & 0xFF == 27: # esc key
+    if interrupt & 0xFF == ord('q'): 
         break
+
+    # instructions panel
+    instructions = np.full((265,460,3), yellow).astype(np.uint8)
+    cv2.putText(instructions, f"IMPORTANT!!", (150, 40), font, 1.5, (0,0,255), 2)
+    cv2.putText(instructions, f"1. During toss, press 'o' for odd and 'e'", (10, 80), 3, 0.6, (0,0,0), 1)
+    cv2.putText(instructions, f"for even and then position your hand", (30, 110), 3, 0.6, (0,0,0), 1)
+    cv2.putText(instructions, f"inside the right frame", (30, 140), 3, 0.6, (0,0,0), 1)
+    cv2.putText(instructions, f"2. When playing, press space and then", (10, 180), 3, 0.6, (0,0,0), 1)
+    cv2.putText(instructions, f"place your hand inside the right frame", (30, 210), 3, 0.6, (0,0,0), 1)
+    cv2.putText(instructions, f"Press esc to close", (302, 260), 2, 0.5, red, 1)
+
+    # esc key to close instructions window
+    if interrupt & 0xFF == 27: 
+        instructions_window = 0
+        cv2.destroyWindow('Instructions')   
 
     # box for human
     roi = frame[229:479, 439:639].copy()  # capture hand image from this roi
@@ -121,6 +132,7 @@ while True:
     # upper right corner instructions
     cv2.putText(frame, f"Press 'space' to play", (460, 20), font, 1, red, 2)
     cv2.putText(frame, f"Press 'r' to restart", (460, 40), font, 1, red, 2)
+    cv2.putText(frame, f"Press 'q' to quit", (460, 60), font, 1, red, 2)
 
     # To conduct toss when game starts
     if (game_started == 0) & (change_turn!=1):   
@@ -157,7 +169,7 @@ while True:
                     player = 'computer'
                 
                 toss = {0:'even', 1:'odd'}[odd_or_even]
-                
+
         if player:
             frame[229:479,1:201] = transparent_background(n_img, frame[229:479,1:201])  # replacing left frame with number image (tranparent background)
             cv2.putText(frame, f"{pred.item()}", (610, 260), font, fontscale, (0,0,0), thickness)
@@ -294,7 +306,9 @@ while True:
     cv2.rectangle(frame, (0, 0), (640, 480), (0,0,0), 2)     # border around the whole frame
 
     cv2.imshow("Hand Cricket", frame)
-    cv2.imshow("Instructions", instructions)
+
+    if instructions_window == 1:
+        cv2.imshow("Instructions", instructions)
 
 cap.release()
 cv2.destroyAllWindows()
