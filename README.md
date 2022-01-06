@@ -18,8 +18,8 @@ https://user-images.githubusercontent.com/38727070/148376979-40d1fdaf-ee42-4210-
 
 ## [Installation](#table-of-content)
 - You need Python (3.6) & git (to clone this repo)
-- `conda env create -f environment.yml` : Create a virtual env with all the dependencies
 - `git clone git@github.com:abhinavnayak11/Hand-Cricket.git .` : Clone this repo
+- `conda env create -f environment.yml` : Create a virtual env with all the dependencies
 - `cd path/to/project` : cd into the project folder
 - `conda activate comp-vision` : activate the virtual env
 - `python src/hand-cricket.py` : Run the script
