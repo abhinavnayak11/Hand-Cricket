@@ -57,7 +57,7 @@ Game code : [hand-cricket.py](src/hand-cricket.py)
     - After failing to find a suitable dataset, I created my own dataset using my phone camera. 
     - The dataset contains a total of 1848 images. To ensure generality (i.e prevent overfitting to one type of hand in one type of environment) images were taken with 4 persons, in 6 different lighting conditions, in 3 different background. 
     - Sample of images post augmentations are shown below, ![images](static/images/training_images.png)
-    - Data collection code : [collect-data.py](src/collect_data.py)
+    - Data can be found uploaded at : [github](input) | [kaggle](https://www.kaggle.com/abhinavnayak/hand-cricket-dataset). Data collection code : [collect-data.py](src/collect_data.py)
 2. **Data preprocessing** : 
     - A Pytorch dataset was created to handle the preprocessing of the image dataset (code : [dataset.py](src/dataset.py)).
     - Images were augmented before training. Following augmentations were used : Random Rotation, Random Horizontal Flip and Normalization. All the images were resized to (128x128). 
@@ -66,7 +66,7 @@ Game code : [hand-cricket.py](src/hand-cricket.py)
     - Different pretrained models(resent18, densenet121 etc, which are pre-trained on the ImageNet dataset)  from pytorch library were used to train on this dataset. Except the last 2 layers, all the layers were frozen and then trained. With this the pre-trained model helps extracting useful features and the last 2 layers will be fine-tuned to my dataset. 
     - Learning rate for training the model was chosen with trial and error. For each model, learning rate was different.
     - Of all the models trained, densnet121 performed the best, with a validation accuracy of 0.994.
-   - Training the model : [train.py](src/train.py), [engine.py](src/engine.py)
+   - Training the model : [train.py](src/train.py), [engine.py](src/engine.py), [training-notebook](notebooks/Training-densenet121.ipynb)
 
 <br>
 
