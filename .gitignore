@@ -5,6 +5,7 @@
 *.zip
 *.mp4
 *.mov
+*.png
 
 # folders
 input/
