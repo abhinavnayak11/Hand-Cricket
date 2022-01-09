@@ -215,7 +215,7 @@ while True:
     # get the time elapsed after pressing space
     elapsed = time.time() - start_time
 
-    # play one ball after 0.5 second of pressing space
+    # play one ball after 1 second of pressing space
     if (play_turn == 1) & (elapsed > 1):
         
         count+=1
